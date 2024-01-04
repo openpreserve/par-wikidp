@@ -20,7 +20,7 @@ from swagger_server.models.file_format import FileFormat  # noqa: E501
 from swagger_server.models.file_formats import FileFormats  # noqa: E501
 from swagger_server import util
 
-
+HEADERS = {'PAR-Default-Version': '1.3'}
 def file_formats_get(guid=None, name=None, modified_after=None, modified_before=None, offset=None, limit=None):  # noqa: E501
     """Get File Formats
 
@@ -47,7 +47,7 @@ def file_formats_get(guid=None, name=None, modified_after=None, modified_before=
         result_set = FACT.filter_by_guids(result_set, guids)
     if modified_before or modified_after:
         result_set = FACT.filter_by_date_modified(result_set, modified_before, modified_after)
-    return FileFormats(FACT.slice_list(result_set, limit, offset))
+    return FileFormats(FACT.slice_list(result_set, limit, offset)), 200, HEADERS
 
 
 def file_formats_guid_delete(guid, Authorization):  # noqa: E501
@@ -78,7 +78,7 @@ def file_formats_guid_get(guid):  # noqa: E501
     ret_val = FACT.get_format(guid)
     if not ret_val:
         abort(404)
-    return ret_val
+    return ret_val, 200, HEADERS
 
 
 def file_formats_guid_put(guid, Authorization, body=None):  # noqa: E501
