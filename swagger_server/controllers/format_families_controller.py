@@ -20,7 +20,7 @@ from swagger_server.models.format_families import FormatFamilies  # noqa: E501
 from swagger_server.models.format_family import FormatFamily  # noqa: E501
 from swagger_server import util
 
-
+HEADERS = {'PAR-Default-Version': '1.3'}
 def format_families_get(file_format_guid=None, file_format_name=None, guid=None, name=None, modified_after=None, modified_before=None, offset=None, limit=None):  # noqa: E501
     """Get Format Families
 
@@ -48,7 +48,7 @@ def format_families_get(file_format_guid=None, file_format_name=None, guid=None,
     result_set = FACT.get_format_families()
     if guid:
         result_set = filter(lambda family: family.id.guid==guid, result_set)
-    return FormatFamilies(FACT.slice_list(result_set, limit, offset))
+    return FormatFamilies(FACT.slice_list(result_set, limit, offset)), 200, HEADERS
 
 
 def format_families_guid_delete(guid, Authorization):  # noqa: E501
@@ -79,7 +79,7 @@ def format_families_guid_get(guid):  # noqa: E501
     ret_val = FACT.get_format_family(guid)
     if not ret_val:
         abort(404)
-    return ret_val
+    return ret_val, 200, HEADERS
 
 
 def format_families_guid_put(guid, Authorization, body=None):  # noqa: E501
